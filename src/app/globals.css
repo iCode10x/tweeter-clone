@@ -2,26 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer base {
+  @font-face {
+    font-family: 'SamsungSharpSans';
+    src: url('/fonts/SamsungSharpSans.woff2') format('woff2');
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  @font-face {
+    font-family: 'SamsungSharpSans-Bold';
+    src: url('/fonts/SamsungSharpSans-Bold.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'SamsungSharpSans-Medium';
+    src: url('/fonts/SamsungSharpSans-Medium.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Poppins-Light';
+    src: url('/fonts/Poppins Light.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Poppins-Medium';
+    src: url('/fonts/Poppins Medium.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Poppins-SemiBold';
+    src: url('/fonts/Poppins SemiBold.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Poppins-Bold';
+    src: url('/fonts/Poppins Bold.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Poppins-ExtraBold';
+    src: url('/fonts/Poppins ExtraBold.woff2') format('woff2');
+  }
 }
