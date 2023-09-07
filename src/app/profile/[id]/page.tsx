@@ -1,6 +1,7 @@
 import ProfileDropDown from '@/components/profile-dropDown'
 import ThemeSwitcher from '@/components/theme-switcher'
 import { SignOutButton, SignedIn } from '@clerk/nextjs'
+import AddTweetButton from '@/components/add-tweet-button'
 import Image from 'next/image'
 import ProfilePageHomeLink from '@/components/profile-page-home-link'
 import { fetchUserData } from '@/lib/actions/UserActions'
@@ -70,14 +71,8 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
       <div className="hidden sm:block fixed right-6 top-6">
         <ThemeSwitcher />
       </div>
-      <div>
-        <Image
-          src="/addlight.png"
-          alt=""
-          height={60}
-          width={60}
-          className="dark:invert fixed bottom-[50px] right-6"
-        />
+      <div className="fixed bottom-[50px] right-6">
+        <AddTweetButton userId={id} />
       </div>
     </div>
   )

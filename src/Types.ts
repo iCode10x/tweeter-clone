@@ -26,3 +26,15 @@ export type DatabaseResponceUser = {
   tweets: any
   _id: string
 }
+
+export type DatabaseResponceTweet = {
+  _id: string
+  User: {
+    _id: string
+    name: string
+    profileImage: string
+  }
+  tweetText: string
+  likes: number
+  tweetComments: any
+}

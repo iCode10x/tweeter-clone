@@ -5,9 +5,11 @@ import Link from 'next/link'
 import { createUserInDB } from '@/lib/actions/UserActions'
 import Profile from '@/components/profile'
 import ProfileDropDown from '@/components/profile-dropDown'
-import { currentUser, SignedIn, SignedOut } from '@clerk/nextjs'
-import { ClerkUserTypes } from '@/Types'
+import { currentUser, SignedIn } from '@clerk/nextjs'
+import { ClerkUserTypes, DatabaseResponceTweet } from '@/Types'
 import AddTweetButton from '@/components/add-tweet-button'
+import { fetchAllTweets } from '@/lib/actions/TweetActions'
+import SingleTweet from '@/components/single-tweet'
 const Home = async () => {
   // @ts-ignore
   const User: ClerkUserTypes = await currentUser()
@@ -21,6 +23,8 @@ const Home = async () => {
     )
     databaseResponceId = res
   }
+  // @ts-ignore
+  const allTweets: DatabaseResponceTweet[] = await fetchAllTweets()
   return (
     <div className="flex relative">
       {/* left section */}
@@ -54,7 +58,7 @@ const Home = async () => {
       </div>
       <div className="w-[295px] hidden sm:flex"></div>
       {/* middle scroll section */}
-      <div className="bg-[#F6F6F6] dark:bg-[#060606] w-screen sm:w-[60vw] h-[200vh]">
+      <div className="bg-[#F6F6F6] dark:bg-[#060606] w-screen sm:w-[60vw]">
         <div className="sm:p-3 p-5  border border-[#CACACA] dark:border-[#242424] flex items-center justify-between sm:justify-center">
           {User ? (
             <ProfileDropDown imgUrl={User.imageUrl} />
@@ -74,15 +78,28 @@ const Home = async () => {
           </div>
         </div>
         {/* Tweets */}
-        <div></div>
+        {/* ///////////// */}
+        <div>
+          {allTweets.map((tweet) => (
+            <SingleTweet
+              key={tweet._id}
+              tweetText={tweet.tweetText}
+              User={tweet.User}
+              tweetComments={tweet.tweetComments}
+              _id={tweet._id}
+              likes={tweet.likes}
+            />
+          ))}
+        </div>
+
+        {/* ////////////// */}
       </div>
       {/* right section  */}
-
       <div className="hidden sm:block fixed right-6 top-6">
         <ThemeSwitcher />
       </div>
       <div className="fixed bottom-[50px] right-6">
-        <AddTweetButton />
+        <AddTweetButton userId={databaseResponceId} />
       </div>
 
       {/* Popover section */}
