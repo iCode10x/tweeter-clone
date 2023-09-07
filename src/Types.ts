@@ -15,3 +15,12 @@ export type ClerkUserTypes = {
     }
   ]
 }
+
+export type DatabaseResponceUser = {
+  name: string
+  email: string
+  profileImage: string
+  clerkId: string
+  tweets: any
+  _id: string
+}

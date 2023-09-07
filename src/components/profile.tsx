@@ -5,10 +5,11 @@ interface Props {
   name: string
   imgUrl: string
   email: string
+  profileLink: string
 }
-const Profile = ({ name, email, imgUrl }: Props) => {
+const Profile = ({ name, email, imgUrl, profileLink }: Props) => {
   return (
-    <Link href="#">
+    <Link href={`/profile/${profileLink}`}>
       <div className="bg-[#EAEAEA] dark:bg-[#121212] p-2 flex flex-col items-center rounded-b-md w-[250px]">
         <p className="font-SamsungSharpSansBold p-3 flex items-center gap-2 dark:text-white">
           My Profile

@@ -2,22 +2,34 @@ import ThemeSwitcher from '@/components/theme-switcher'
 import Image from 'next/image'
 import { SignOutButton } from '@clerk/nextjs'
 import Link from 'next/link'
+import { createUserInDB } from '@/lib/actions/UserActions'
 import Profile from '@/components/profile'
+import ProfileDropDown from '@/components/profile-dropDown'
 import { currentUser, SignedIn, SignedOut } from '@clerk/nextjs'
 import { ClerkUserTypes } from '@/Types'
 const Home = async () => {
   // @ts-ignore
   const User: ClerkUserTypes = await currentUser()
-
+  let databaseResponceId: string = ''
+  if (User) {
+    const res: string = await createUserInDB(
+      User.firstName,
+      User.emailAddresses[0].emailAddress,
+      User.imageUrl,
+      User.id
+    )
+    databaseResponceId = res
+  }
   return (
     <div className="flex relative">
       {/* left section */}
       <div className="hidden sm:flex fixed h-screen  flex-col justify-between  px-3 pr-8">
-        {User?.id ? (
+        {User ? (
           <Profile
             name={User.firstName}
             imgUrl={User.imageUrl}
             email={User.emailAddresses[0].emailAddress}
+            profileLink={databaseResponceId}
           />
         ) : (
           <Link
@@ -43,13 +55,18 @@ const Home = async () => {
       {/* middle scroll section */}
       <div className="bg-[#F6F6F6] dark:bg-[#060606] w-screen sm:w-[60vw] h-[200vh]">
         <div className="sm:p-3 p-5  border border-[#242424] flex items-center justify-between sm:justify-center">
-          <Image
-            src="/profile.png"
-            width={50}
-            height={50}
-            alt="profile"
-            className="sm:hidden"
-          />
+          {User ? (
+            <ProfileDropDown imgUrl={User.imageUrl} />
+          ) : (
+            <Link
+              href="/login"
+              className="sm:hidden p-2 rounded-md dark:bg-[#121212] bg-[#EAEAEA] "
+            >
+              <button className="w-full font-SamsungSharpSansBold text-center p-4 bg-white dark:bg-black dark:text-white">
+                Login
+              </button>
+            </Link>
+          )}
           <Image src="/X.png" alt="X" width={70} height={70} className="" />
           <div className="sm:hidden">
             <ThemeSwitcher />
