@@ -1,8 +1,9 @@
 'use client'
 import Image from 'next/image'
+import { useAppContext } from '@/Context/AppContext'
 import { useEffect, useState } from 'react'
 const ThemeSwitcher = () => {
-  const [theme, setTheme] = useState('light')
+  const { theme, setTheme } = useAppContext()
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark')

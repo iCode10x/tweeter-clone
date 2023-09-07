@@ -55,7 +55,7 @@ const Home = async () => {
       <div className="w-[295px] hidden sm:flex"></div>
       {/* middle scroll section */}
       <div className="bg-[#F6F6F6] dark:bg-[#060606] w-screen sm:w-[60vw] h-[200vh]">
-        <div className="sm:p-3 p-5  border border-[#242424] flex items-center justify-between sm:justify-center">
+        <div className="sm:p-3 p-5  border border-[#CACACA] dark:border-[#242424] flex items-center justify-between sm:justify-center">
           {User ? (
             <ProfileDropDown imgUrl={User.imageUrl} />
           ) : (
@@ -84,6 +84,10 @@ const Home = async () => {
       <div className="fixed bottom-[50px] right-6">
         <AddTweetButton />
       </div>
+
+      {/* Popover section */}
+
+      {/* <div className="fixed   h-screen w-screen dark:bg-black/40 bg-white/70 "></div> */}
     </div>
   )
 }

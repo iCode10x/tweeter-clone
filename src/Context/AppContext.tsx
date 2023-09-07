@@ -6,8 +6,13 @@ const context = createContext({} as AppContextTypes)
 
 const AppContext = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const [openPopover1, setopenPopover1] = useState(false)
   return (
-    <context.Provider value={{ theme, setTheme }}>{children}</context.Provider>
+    <context.Provider
+      value={{ theme, setTheme, openPopover1, setopenPopover1 }}
+    >
+      {children}
+    </context.Provider>
   )
 }
 export default AppContext
