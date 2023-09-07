@@ -7,6 +7,7 @@ import Profile from '@/components/profile'
 import ProfileDropDown from '@/components/profile-dropDown'
 import { currentUser, SignedIn, SignedOut } from '@clerk/nextjs'
 import { ClerkUserTypes } from '@/Types'
+import AddTweetButton from '@/components/add-tweet-button'
 const Home = async () => {
   // @ts-ignore
   const User: ClerkUserTypes = await currentUser()
@@ -67,7 +68,7 @@ const Home = async () => {
               </button>
             </Link>
           )}
-          <Image src="/X.png" alt="X" width={70} height={70} className="" />
+          <Image src="/X.png" alt="X" width={50} height={50} className="" />
           <div className="sm:hidden">
             <ThemeSwitcher />
           </div>
@@ -80,14 +81,8 @@ const Home = async () => {
       <div className="hidden sm:block fixed right-6 top-6">
         <ThemeSwitcher />
       </div>
-      <div>
-        <Image
-          src="/addlight.png"
-          alt=""
-          height={60}
-          width={60}
-          className="dark:invert fixed bottom-[50px] right-6"
-        />
+      <div className="fixed bottom-[50px] right-6">
+        <AddTweetButton />
       </div>
     </div>
   )

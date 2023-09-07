@@ -5,6 +5,7 @@ import Image from 'next/image'
 import ProfilePageHomeLink from '@/components/profile-page-home-link'
 import { fetchUserData } from '@/lib/actions/UserActions'
 import { DatabaseResponceUser } from '@/Types'
+import ProfileSettingsButton from '@/components/profile-settings-button'
 
 const Profile = async ({ params: { id } }: { params: { id: string } }) => {
   const UserData: DatabaseResponceUser = await fetchUserData(id)
@@ -27,16 +28,42 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
       <div className="w-[295px] hidden sm:flex"></div>
       {/* middle scroll section */}
       <div className="bg-[#F6F6F6] dark:bg-[#060606] w-screen sm:w-[60vw] h-[200vh]">
-        <div className="sm:p-3 p-5  border border-[#242424] flex items-center justify-between sm:justify-center">
-          {/* <ProfileDropDown imgUrl={User.imageUrl} /> */}
+        <div className="sm:p-3 p-5  border border-[#CACACA] dark:border-[#242424] flex items-center justify-between sm:justify-center">
+          <ProfileDropDown imgUrl={UserData.profileImage} />
 
-          <Image src="/X.png" alt="X" width={70} height={70} className="" />
+          <Image src="/X.png" alt="X" width={50} height={50} className="" />
           <div className="sm:hidden">
             <ThemeSwitcher />
           </div>
         </div>
-        {/* Tweets */}
-        <div></div>
+        {/* Profile data */}
+        <div>
+          <div className="relative border border-[#CACACA] dark:border-[#242424] p-4">
+            <div className="flex flex-col items-center">
+              <Image
+                src={UserData.profileImage}
+                alt="profile"
+                width={150}
+                height={150}
+                className="rounded-full"
+              />
+              <div className="flex flex-col items-center">
+                <p className="my-2 font-SamsungSharpSansBold text-lg dark:text-white">
+                  {UserData.name}
+                </p>
+                <p className="font-SamsungSharpSansMedium text-[#787878]">
+                  {UserData.email}
+                </p>
+              </div>
+            </div>
+            <p className="text-xl mt-12 font-SamsungSharpSansBold dark:text-white">
+              My Posts
+            </p>
+            <div className="absolute right-5 top-5">
+              <ProfileSettingsButton />
+            </div>
+          </div>
+        </div>
       </div>
       {/* right section  */}
 
