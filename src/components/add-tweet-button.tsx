@@ -1,20 +1,71 @@
 'use client'
 import Image from 'next/image'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { createTweetInDB } from '@/lib/actions/TweetActions'
-import { useAppContext } from '@/Context/AppContext'
+import { useUploadThing } from '@/lib/uploadthing'
+import { isBase64Image } from '@/lib/utils'
+import { toast } from 'react-hot-toast'
+import { createImageTweetInDB } from '@/lib/actions/TweetActions'
+
 const AddTweetButton = ({ userId }: { userId: string }) => {
   const [open, setOpen] = useState(false)
-  // const { openPopover1, setopenPopover1 } = useAppContext()
+  const [files, setFiles] = useState<File[]>([])
   const [openPopover1, setopenPopover1] = useState(false)
   const [openPopover2, setopenPopover2] = useState(false)
+  const [imageUrl, setImageUrl] = useState<string | undefined>()
+  const [caption, setCaption] = useState('')
   const [tweetText, setTweetText] = useState('')
+  const { startUpload } = useUploadThing('media')
   async function addTextTweet() {
+    if (tweetText === '') {
+      toast.error('Input field empty!')
+      return
+    }
     await createTweetInDB(userId, tweetText)
+    toast.success('Tweet added!')
     setTweetText('')
     setopenPopover1(false)
   }
+  async function addImageTweet() {
+    if (imageUrl === undefined || caption === '') {
+      if (imageUrl === undefined) {
+        toast.error('Image field empty!')
+        return
+      } else if (caption === '') {
+        toast.error('Caption field empty')
+        return
+      }
+    }
+    let uploadedImageUrl = ''
+    const blob = imageUrl
+    const hasImageChanged = isBase64Image(blob || '')
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files)
+      if (imgRes && imgRes[0].url) {
+        uploadedImageUrl = imgRes[0].url
+      }
+    }
+    setImageUrl(undefined)
+    setCaption('')
+    setopenPopover2(false)
 
+    await createImageTweetInDB(userId, uploadedImageUrl, caption)
+    toast.success('Tweet added!')
+  }
+  function handleImage(e: ChangeEvent<HTMLInputElement>) {
+    e.preventDefault()
+    const fileReader = new FileReader()
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0]
+      setFiles(Array.from(e.target.files))
+      if (!file.type.includes('image')) return
+      fileReader.onload = async (event) => {
+        const imageDataUrl = event.target?.result?.toString() || ''
+        setImageUrl(imageDataUrl)
+      }
+      fileReader.readAsDataURL(file)
+    }
+  }
   return (
     <div>
       {/* text tweet popover */}
@@ -55,26 +106,69 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
             <p className="font-SamsungSharpSansBold  dark:text-white">
               Upload Image
             </p>
-            <div className="flex flex-col items-center">
-              <Image
-                src="/upload-image.png"
-                alt="image"
-                width={60}
-                height={60}
-                className="mx-auto my-5"
-              />
-              <input type="file" className="my-2" />
+            <div className="flex flex-col items-center w-full  ">
+              {imageUrl ? (
+                <div className="relative">
+                  <Image
+                    style={{
+                      width: 'auto',
+                      height: 'auto',
+                      maxWidth: 300,
+                      maxHeight: 200,
+                    }}
+                    src={imageUrl}
+                    alt="image"
+                    width={150}
+                    height={150}
+                    className=" my-5 "
+                  />
+                  <div className="absolute top-8 right-4 w-[20px] h-[20px] rounded-full bg-white flex justify-center items-center">
+                    <Image
+                      onClick={() => {
+                        setImageUrl(undefined)
+                        setFiles([])
+                      }}
+                      src="/close.png"
+                      alt="close"
+                      width={12}
+                      height={12}
+                      className="object-contain "
+                    />
+                  </div>
+                </div>
+              ) : (
+                <label
+                  htmlFor="fileInput"
+                  className="relative cursor-pointer text-white"
+                >
+                  <Image
+                    src="/upload-image.png"
+                    alt="image"
+                    width={60}
+                    height={60}
+                    className="mx-auto my-5"
+                  />
+                  <input
+                    type="file"
+                    id="fileInput"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    onChange={(e) => handleImage(e)}
+                  />
+                </label>
+              )}
             </div>
             <p className="font-SamsungSharpSansBold  dark:text-white">
               Add Caption
             </p>
             <input
+              onChange={(e) => setCaption(e.target.value)}
+              value={caption}
               type="text"
               className="w-full font-SamsungSharpSans dark:bg-[#060606] outline-none border border-[#CACACA] rounded-[10px] mt-3 mb-5 p-2"
             />
             <div className="flex">
               <button
-                onClick={addTextTweet}
+                onClick={addImageTweet}
                 className=" rounded-[9px] font-SamsungSharpSansBold mx-auto bg-black text-white py-2 px-12 dark:bg-white dark:text-black"
               >
                 Post

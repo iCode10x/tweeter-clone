@@ -6,8 +6,19 @@ const SingleTweet = ({
   _id,
   likes,
   tweetComments,
+  tweetImage,
+  tweetImageCaption,
 }: DatabaseResponceTweet) => {
-  console.log(_id)
-  return <div>{tweetText}</div>
+  return (
+    <div className="border-2">
+      {tweetText && <p>{tweetText}</p>}
+      {tweetImage && (
+        <div>
+          <p>{tweetImageCaption}</p>
+          <p>{tweetImage}</p>
+        </div>
+      )}
+    </div>
+  )
 }
 export default SingleTweet

@@ -34,7 +34,9 @@ export type DatabaseResponceTweet = {
     name: string
     profileImage: string
   }
-  tweetText: string
+  tweetImage?: string
+  tweetImageCaption?: string
+  tweetText?: string
   likes: number
   tweetComments: any
 }

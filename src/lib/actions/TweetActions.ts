@@ -17,6 +17,23 @@ export async function createTweetInDB(userId: string, tweetText: string) {
   }
 }
 
+export async function createImageTweetInDB(
+  userId: string,
+  tweetImageUrl: string,
+  caption: string
+) {
+  try {
+    await connectToDB()
+    const newlyCreatedImageTweet = await Tweet.create({
+      User: userId,
+      tweetImage: tweetImageUrl,
+      tweetImageCaption: caption,
+    })
+  } catch (error: any) {
+    throw new Error('Unable to create image tweet', error.message)
+  }
+}
+
 export async function fetchAllTweets() {
   try {
     await connectToDB()

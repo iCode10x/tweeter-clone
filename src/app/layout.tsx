@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import AppContext from '@/Context/AppContext'
 import { ClerkProvider } from '@clerk/nextjs'
+import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
   title: 'Tweeter',
@@ -18,7 +19,9 @@ export default function RootLayout({
     <ClerkProvider>
       <AppContext>
         <html lang="en">
-          <body className={` dark:bg-black`}>{children}</body>
+          <body className={` dark:bg-black`}>
+            <Toaster/>
+            {children}</body>
         </html>
       </AppContext>
     </ClerkProvider>

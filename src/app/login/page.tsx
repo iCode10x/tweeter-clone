@@ -1,4 +1,3 @@
-'use client'
 import Image from 'next/image'
 import ThemeSwitcher from '@/components/theme-switcher'
 import LoginPassword from '@/components/login-password'

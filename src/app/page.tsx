@@ -25,6 +25,7 @@ const Home = async () => {
   }
   // @ts-ignore
   const allTweets: DatabaseResponceTweet[] = await fetchAllTweets()
+  console.log(allTweets)
   return (
     <div className="flex relative">
       {/* left section */}
@@ -85,6 +86,8 @@ const Home = async () => {
               key={tweet._id}
               tweetText={tweet.tweetText}
               User={tweet.User}
+              tweetImage={tweet.tweetImage}
+              tweetImageCaption={tweet.tweetImageCaption}
               tweetComments={tweet.tweetComments}
               _id={tweet._id}
               likes={tweet.likes}
