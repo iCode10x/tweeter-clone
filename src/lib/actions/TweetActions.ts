@@ -40,7 +40,7 @@ export async function fetchAllTweets() {
     const allTweets = await Tweet.find().populate({
       path: 'User',
       model: User,
-      select: 'name profileImage',
+      select: 'name profileImage clerkId',
     })
     return allTweets
   } catch (error: any) {

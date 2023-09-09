@@ -13,6 +13,7 @@ import SingleTweet from '@/components/single-tweet'
 const Home = async () => {
   // @ts-ignore
   const User: ClerkUserTypes = await currentUser()
+
   let databaseResponceId: string = ''
   if (User) {
     const res: string = await createUserInDB(
@@ -25,7 +26,6 @@ const Home = async () => {
   }
   // @ts-ignore
   const allTweets: DatabaseResponceTweet[] = await fetchAllTweets()
-  console.log(allTweets)
   return (
     <div className="flex relative">
       {/* left section */}
@@ -83,9 +83,13 @@ const Home = async () => {
         <div>
           {allTweets.map((tweet) => (
             <SingleTweet
+              LoggedInUserClerkId={User.id}
               key={tweet._id}
               tweetText={tweet.tweetText}
-              User={tweet.User}
+              userClerkId={User.id}
+              userId={User.id}
+              userName={User.firstName}
+              userProfileImage={User.imageUrl}
               tweetImage={tweet.tweetImage}
               tweetImageCaption={tweet.tweetImageCaption}
               tweetComments={tweet.tweetComments}
