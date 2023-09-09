@@ -2,6 +2,7 @@
 import { connectToDB } from '../mongoose'
 import { Tweet } from '../models/TweetModel'
 import { User } from '../models/UserModel'
+import { revalidatePath } from 'next/cache'
 
 export async function createTweetInDB(userId: string, tweetText: string) {
   try {
@@ -46,4 +47,50 @@ export async function fetchAllTweets() {
   } catch (error: any) {
     throw new Error('Unable to fetch tweets', error.message)
   }
+}
+
+export async function likeTweet(
+  tweetId: string,
+  action: 'inc' | 'dec',
+  path: string
+) {
+  try {
+    await connectToDB()
+    const targetTweet = await Tweet.findById(tweetId)
+
+    if (action === 'inc') {
+      const updatedlikes = targetTweet.likes + 1
+      await Tweet.findByIdAndUpdate(tweetId, {
+        likes: updatedlikes,
+      })
+    } else {
+      if (targetTweet.likes > 0) {
+        const updatedlikes = targetTweet.likes - 1
+        await Tweet.findByIdAndUpdate(tweetId, {
+          likes: updatedlikes,
+        })
+      }
+    }
+    revalidatePath(path)
+  } catch (error: any) {
+    throw new Error('Unable to like tweet', error.message)
+  }
+}
+
+export async function addComment(
+  tweetId: string,
+  commentText: string,
+  LoggedInUserDatabaseId: string
+) {
+  try {
+    await connectToDB()
+    await Tweet.findByIdAndUpdate(tweetId, {
+      $push: {
+        tweetComments: {
+          commentator: LoggedInUserDatabaseId,
+          text: commentText,
+        },
+      },
+    })
+  } catch (error) {}
 }

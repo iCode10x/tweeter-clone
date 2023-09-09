@@ -6,7 +6,7 @@ import { createUserInDB } from '@/lib/actions/UserActions'
 import Profile from '@/components/profile'
 import ProfileDropDown from '@/components/profile-dropDown'
 import { currentUser, SignedIn } from '@clerk/nextjs'
-import { ClerkUserTypes, DatabaseResponceTweet } from '@/Types'
+import { ClerkUserTypes, DatabaseResponceTweets } from '@/Types'
 import AddTweetButton from '@/components/add-tweet-button'
 import { fetchAllTweets } from '@/lib/actions/TweetActions'
 import SingleTweet from '@/components/single-tweet'
@@ -25,7 +25,8 @@ const Home = async () => {
     databaseResponceId = res
   }
   // @ts-ignore
-  const allTweets: DatabaseResponceTweet[] = await fetchAllTweets()
+  const allTweets: DatabaseResponceTweets[] = await fetchAllTweets()
+  console.log(allTweets)
   return (
     <div className="flex relative">
       {/* left section */}
@@ -84,15 +85,17 @@ const Home = async () => {
           {allTweets.map((tweet) => (
             <SingleTweet
               LoggedInUserClerkId={User.id}
+              LoggedInUserDatabaseId={databaseResponceId}
               key={tweet._id}
               tweetText={tweet.tweetText}
-              userClerkId={User.id}
-              userId={User.id}
+              userClerkId={tweet.User.clerkId}
+              userId={databaseResponceId}
               userName={User.firstName}
               userProfileImage={User.imageUrl}
               tweetImage={tweet.tweetImage}
               tweetImageCaption={tweet.tweetImageCaption}
-              tweetComments={tweet.tweetComments}
+              // tweetComments={tweet.tweetComments}
+              tweetComments={allTweets[0].tweetComments}
               _id={tweet._id}
               likes={tweet.likes}
             />

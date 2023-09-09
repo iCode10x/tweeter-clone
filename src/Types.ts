@@ -27,17 +27,44 @@ export type DatabaseResponceUser = {
   _id: string
 }
 
-export type DatabaseResponceTweet = {
+export type DatabaseResponceTweets = {
   _id: string
+  User: {
+    _id: string
+    name: string
+    profileImage: string
+    clerkId: string
+  }
+  LoggedInUserClerkId: string
+  tweetText: string
+  likes: number
+  tweetComments: {
+    commentator: string
+    text: string
+    _id: string
+  }[]
+  tweetImage: string
+  tweetImageCaption: string
+}
 
+export type singleTweetType = {
+  _id: string
   userId: string
   userName: string
   userProfileImage: string
   userClerkId: string
-  tweetImage?: string
-  tweetImageCaption?: string
-  tweetText?: string
+  LoggedInUserClerkId: string
+  tweetText: string
   likes: number
   tweetComments: any
-  LoggedInUserClerkId: string
+  tweetImage: string
+  tweetImageCaption: string
+  LoggedInUserDatabaseId: string
 }
+// ;[
+//   {
+//     commentator: new ObjectId('64f8daa05ecffb111db6aa91'),
+//     text: 'Just a random comment',
+//     _id: new ObjectId('64fcb6eda825a8396847e88d'),
+//   },
+// ]
