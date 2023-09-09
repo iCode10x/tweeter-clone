@@ -20,8 +20,9 @@ export default function RootLayout({
       <AppContext>
         <html lang="en">
           <body className={` dark:bg-black`}>
-            <Toaster/>
-            {children}</body>
+            <Toaster />
+            {children}
+          </body>
         </html>
       </AppContext>
     </ClerkProvider>
