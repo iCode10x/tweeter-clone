@@ -9,6 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 interface Props {
   tweetUserClerkID: string
   LoggedInUserClerkId: string
@@ -20,6 +22,7 @@ const TweetOptions = ({ tweetUserClerkID, LoggedInUserClerkId }: Props) => {
         <DropdownMenuTrigger>
           <Image src="/more.png" alt="options" width={20} height={20} />
         </DropdownMenuTrigger>
+
         {tweetUserClerkID === LoggedInUserClerkId ? (
           <DropdownMenuContent className="rounded-[10px] relative  dark:bg-black dark:border-[#242424] mr-6">
             <DropdownMenuLabel>

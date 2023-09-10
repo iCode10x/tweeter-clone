@@ -26,7 +26,8 @@ const Home = async () => {
   }
   // @ts-ignore
   const allTweets: DatabaseResponceTweets[] = await fetchAllTweets()
-  console.log(allTweets)
+
+  // console.log(allTweets[0].tweetComments[0].commentator.profileImage)
   return (
     <div className="flex relative">
       {/* left section */}
@@ -94,8 +95,8 @@ const Home = async () => {
               userProfileImage={User.imageUrl}
               tweetImage={tweet.tweetImage}
               tweetImageCaption={tweet.tweetImageCaption}
-              // tweetComments={tweet.tweetComments}
-              tweetComments={allTweets[0].tweetComments}
+              tweetComments={JSON.stringify(tweet.tweetComments.reverse())}
+              // testArray={testArray}
               _id={tweet._id}
               likes={tweet.likes}
             />

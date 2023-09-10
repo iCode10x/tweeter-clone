@@ -20,6 +20,7 @@ const SingleTweet = ({
   LoggedInUserClerkId,
   LoggedInUserDatabaseId,
 }: singleTweetType) => {
+  const commentsData = JSON.parse(tweetComments)
   const pathname = usePathname()
   const [openComments, setOpenComments] = useState(false)
   const [imageOpen, setImageOpen] = useState(false)
@@ -29,6 +30,7 @@ const SingleTweet = ({
     if (!liked) await likeTweet(_id, 'inc', pathname)
     else await likeTweet(_id, 'dec', pathname)
   }
+  async function handleDelete() {}
   return (
     <div className="border border-[#CACACA] dark:border-[#242424] p-7 relative">
       <div className="flex items-start  gap-3">
@@ -75,17 +77,27 @@ const SingleTweet = ({
             {likes} likes
           </p>
         </div>
-        {/* {tweetComments.length > -1 && (
+        {commentsData.length > 0 ? (
           <div
             className="flex gap-2 items-center"
             onClick={() => setOpenComments(true)}
           >
             <Image src="/message.png" alt="like" width={20} height={20} />
             <p className="font-PoppinsLight text-[15px] cursor-pointer">
-              view all {tweetComments.length} comments
+              view all {commentsData.length} comments
             </p>
           </div>
-        )} */}
+        ) : (
+          <div
+            className="flex gap-2 items-center"
+            onClick={() => setOpenComments(true)}
+          >
+            <Image src="/message.png" alt="like" width={20} height={20} />
+            <p className="font-PoppinsLight text-[15px] cursor-pointer">
+              Comment
+            </p>
+          </div>
+        )}
       </div>
       <div className="absolute top-5 right-4">
         <TweetOptions
@@ -117,9 +129,10 @@ const SingleTweet = ({
       {openComments && (
         <div className="fixed dark:bg-white/10 bg-black/30 backdrop-blur-md h-screen w-screen z-20 top-0 left-0 flex justify-center items-center">
           <Comments
-            tweetComments={tweetComments}
+            tweetComments={commentsData}
             LoggedInUserDatabaseId={LoggedInUserDatabaseId}
             tweetId={_id}
+            setOpenComments={setOpenComments}
           />
         </div>
       )}

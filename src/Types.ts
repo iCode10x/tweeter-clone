@@ -39,7 +39,11 @@ export type DatabaseResponceTweets = {
   tweetText: string
   likes: number
   tweetComments: {
-    commentator: string
+    commentator: {
+      _id: string
+      name: string
+      profileImage: string
+    }
     text: string
     _id: string
   }[]

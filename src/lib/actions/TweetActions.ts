@@ -38,11 +38,17 @@ export async function createImageTweetInDB(
 export async function fetchAllTweets() {
   try {
     await connectToDB()
-    const allTweets = await Tweet.find().populate({
-      path: 'User',
-      model: User,
-      select: 'name profileImage clerkId',
-    })
+    const allTweets = await Tweet.find()
+      .populate({
+        path: 'User',
+        model: User,
+        select: 'name profileImage clerkId',
+      })
+      .populate({
+        path: 'tweetComments.commentator',
+        model: User,
+        select: 'name profileImage',
+      })
     return allTweets
   } catch (error: any) {
     throw new Error('Unable to fetch tweets', error.message)
@@ -80,7 +86,8 @@ export async function likeTweet(
 export async function addComment(
   tweetId: string,
   commentText: string,
-  LoggedInUserDatabaseId: string
+  LoggedInUserDatabaseId: string,
+  path: string
 ) {
   try {
     await connectToDB()
@@ -92,5 +99,8 @@ export async function addComment(
         },
       },
     })
-  } catch (error) {}
+    revalidatePath(path)
+  } catch (error: any) {
+    throw new Error('Unable to add comment', error.message)
+  }
 }
