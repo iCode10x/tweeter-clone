@@ -114,3 +114,26 @@ export const deleteTweet = async (tweetId: string, path: string) => {
     throw new Error('Unable to delete tweet', error.message)
   }
 }
+
+export async function editTweet(
+  tweetId: string,
+  textTweet: string | undefined,
+  caption: string | undefined,
+  path: string
+) {
+  try {
+    await connectToDB()
+    if (textTweet) {
+      await Tweet.findByIdAndUpdate(tweetId, {
+        tweetText: textTweet,
+      })
+    } else if (caption) {
+      await Tweet.findByIdAndUpdate(tweetId, {
+        tweetImageCaption: caption,
+      })
+    }
+    revalidatePath(path)
+  } catch (error: any) {
+    throw new Error('Unable to edit tweet', error.message)
+  }
+}

@@ -103,6 +103,8 @@ const SingleTweet = ({
           tweetId={_id}
           tweetUserClerkID={userClerkId}
           LoggedInUserClerkId={LoggedInUserClerkId}
+          textTweet={tweetText && tweetText}
+          imageTweetCaption={tweetImageCaption}
         />
       </div>
       {imageOpen && (

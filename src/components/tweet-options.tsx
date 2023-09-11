@@ -2,32 +2,38 @@
 
 import Image from 'next/image'
 import { toast } from 'react-hot-toast'
-import { deleteTweet } from '@/lib/actions/TweetActions'
+import { deleteTweet, editTweet } from '@/lib/actions/TweetActions'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useEffect, useState } from 'react'
-import { Dispatch, SetStateAction } from 'react'
+
 interface Props {
   tweetId: string
   tweetUserClerkID: string
   LoggedInUserClerkId: string
   pathname: string
+  textTweet?: string
+  imageTweetCaption?: string
 }
 const TweetOptions = ({
   tweetUserClerkID,
   LoggedInUserClerkId,
   tweetId,
   pathname,
+  imageTweetCaption,
+  textTweet,
 }: Props) => {
   const [openDeletePopup, setOpenDeletePopup] = useState(false)
   const [showTweetOptions, setShowTweetOptions] = useState(true)
-  const [editText, setEditText] = useState('')
+  const [editText, setEditText] = useState<string | undefined>(textTweet)
+  const [editCaption, setEditCaption] = useState<string | undefined>(
+    imageTweetCaption
+  )
   const [openEditPopup, setOpenEditPopup] = useState(false)
   useEffect(() => {
     if (openDeletePopup) setShowTweetOptions(false)
@@ -37,7 +43,13 @@ const TweetOptions = ({
     setOpenDeletePopup(false)
     setShowTweetOptions(true)
     await deleteTweet(tweetId, pathname)
-    toast.error('Tweet deleted')
+    toast.error('Tweet deleted!')
+  }
+  async function handleEdit() {
+    setOpenEditPopup(false)
+    setShowTweetOptions(true)
+    await editTweet(tweetId, editText, editCaption, pathname)
+    toast.success('Tweet updated!')
   }
   return (
     <div>
@@ -151,10 +163,17 @@ const TweetOptions = ({
             <div className="flex flex-col gap-4 sm:p-8 p-6 items-center">
               <textarea
                 className="outline-none rounded-[8px] p-3 w-[280px] sm:w-[330px] bg-[#F6F6F6] dark:bg-[#060606] border-2 border-[#787878] dark:border-[#FFFFFF] h-[144px] font-PoppinsMedium"
-                value={editText}
-                onChange={(e) => setEditText(e.target.value)}
+                value={editText ? editText : editCaption}
+                onChange={(e) => {
+                  editText
+                    ? setEditText(e.target.value)
+                    : setEditCaption(e.target.value)
+                }}
               />
-              <button className="bg-black text-white font-SamsungSharpSansBold rounded-[12px] py-2 px-6 text-[16px] mt-2 dark:bg-white dark:text-black">
+              <button
+                onClick={handleEdit}
+                className="bg-black text-white font-SamsungSharpSansBold rounded-[12px] py-2 px-6 text-[16px] mt-2 dark:bg-white dark:text-black"
+              >
                 Update
               </button>
             </div>
@@ -165,14 +184,3 @@ const TweetOptions = ({
   )
 }
 export default TweetOptions
-
-{
-  /* <DropdownMenuLabel>
-            <p className="font-SamsungSharpSansBold py-2 px-6 text-center text-[16px]">
-              Settings
-            </p>
-          </DropdownMenuLabel> */
-}
-
-{
-}
