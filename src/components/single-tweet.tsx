@@ -4,6 +4,7 @@ import Image from 'next/image'
 import TweetOptions from './tweet-options'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+
 import { likeTweet } from '@/lib/actions/TweetActions'
 import Comments from './comments'
 const SingleTweet = ({
@@ -30,7 +31,6 @@ const SingleTweet = ({
     if (!liked) await likeTweet(_id, 'inc', pathname)
     else await likeTweet(_id, 'dec', pathname)
   }
-  async function handleDelete() {}
   return (
     <div className="border border-[#CACACA] dark:border-[#242424] p-7 relative">
       <div className="flex items-start  gap-3">
@@ -44,9 +44,7 @@ const SingleTweet = ({
         <div>
           <p className="font-SamsungSharpSansBold">{userName}</p>
           {tweetText && (
-            <p className="font-PoppinsMedium sm:w-[65%] w-full mt-2">
-              {tweetText}
-            </p>
+            <p className="font-PoppinsMedium  w-full mt-2">{tweetText}</p>
           )}
           {tweetImage && (
             <div className="mt-2">
@@ -101,6 +99,8 @@ const SingleTweet = ({
       </div>
       <div className="absolute top-5 right-4">
         <TweetOptions
+          pathname={pathname}
+          tweetId={_id}
           tweetUserClerkID={userClerkId}
           LoggedInUserClerkId={LoggedInUserClerkId}
         />

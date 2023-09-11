@@ -104,3 +104,13 @@ export async function addComment(
     throw new Error('Unable to add comment', error.message)
   }
 }
+
+export const deleteTweet = async (tweetId: string, path: string) => {
+  try {
+    await connectToDB()
+    await Tweet.findByIdAndDelete(tweetId)
+    revalidatePath(path)
+  } catch (error: any) {
+    throw new Error('Unable to delete tweet', error.message)
+  }
+}
