@@ -37,7 +37,7 @@ export type DatabaseResponceTweets = {
   }
   LoggedInUserClerkId: string
   tweetText: string
-  likes: number
+  likes: string[]
   tweetComments: {
     commentator: {
       _id: string
@@ -59,7 +59,7 @@ export type singleTweetType = {
   userClerkId: string
   LoggedInUserClerkId: string
   tweetText: string
-  likes: number
+  likes: string[]
   tweetComments: any
   tweetImage: string
   tweetImageCaption: string

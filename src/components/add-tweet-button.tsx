@@ -6,8 +6,10 @@ import { useUploadThing } from '@/lib/uploadthing'
 import { isBase64Image } from '@/lib/utils'
 import { toast } from 'react-hot-toast'
 import { createImageTweetInDB } from '@/lib/actions/TweetActions'
+import { usePathname } from 'next/navigation'
 
 const AddTweetButton = ({ userId }: { userId: string }) => {
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [files, setFiles] = useState<File[]>([])
   const [openPopover1, setopenPopover1] = useState(false)
@@ -21,7 +23,7 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
       toast.error('Input field empty!')
       return
     }
-    await createTweetInDB(userId, tweetText)
+    await createTweetInDB(userId, tweetText, pathname)
     toast.success('Tweet added!')
     setTweetText('')
     setopenPopover1(false)
@@ -49,7 +51,7 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
     setCaption('')
     setopenPopover2(false)
 
-    await createImageTweetInDB(userId, uploadedImageUrl, caption)
+    await createImageTweetInDB(userId, uploadedImageUrl, caption, pathname)
     toast.success('Tweet added!')
   }
   function handleImage(e: ChangeEvent<HTMLInputElement>) {

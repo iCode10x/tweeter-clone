@@ -3,8 +3,7 @@ import { singleTweetType } from '@/Types'
 import Image from 'next/image'
 import TweetOptions from './tweet-options'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
-
+import { useEffect, useState } from 'react'
 import { likeTweet } from '@/lib/actions/TweetActions'
 import Comments from './comments'
 const SingleTweet = ({
@@ -25,12 +24,15 @@ const SingleTweet = ({
   const pathname = usePathname()
   const [openComments, setOpenComments] = useState(false)
   const [imageOpen, setImageOpen] = useState(false)
-  const [liked, setLiked] = useState(false)
+  const [liked, setLiked] = useState<boolean>()
   async function handleLike() {
-    setLiked((prev) => !prev)
-    if (!liked) await likeTweet(_id, 'inc', pathname)
-    else await likeTweet(_id, 'dec', pathname)
+    await likeTweet(_id, userId, pathname)
   }
+  useEffect(() => {
+    const userLiked = likes.find((item) => item === userId)
+    if (userLiked) setLiked(true)
+    else setLiked(false)
+  }, [likes])
   return (
     <div className="border border-[#CACACA] dark:border-[#242424] p-7 relative">
       <div className="flex items-start  gap-3">
@@ -66,13 +68,13 @@ const SingleTweet = ({
         <div className="flex gap-2 items-center">
           <Image
             onClick={handleLike}
-            src={`${likes > 0 ? '/heart.png' : '/white-heart.png'}`}
+            src={`${liked ? '/heart.png' : '/white-heart.png'}`}
             alt="like"
             width={20}
             height={20}
           />
           <p className="font-PoppinsLight text-[15px] cursor-pointer">
-            {likes} likes
+            {likes.length} likes
           </p>
         </div>
         {commentsData.length > 0 ? (

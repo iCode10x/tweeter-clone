@@ -5,7 +5,8 @@ const tweetModel = new mongoose.Schema({
   tweetText: { type: String },
   tweetImage: { type: String },
   tweetImageCaption: { type: String },
-  likes: { type: Number, default: 0 },
+  // likes: { type: Number, default: 0 },
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   tweetComments: [
     {
       commentator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

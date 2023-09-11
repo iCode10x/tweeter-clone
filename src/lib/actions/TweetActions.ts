@@ -4,15 +4,19 @@ import { Tweet } from '../models/TweetModel'
 import { User } from '../models/UserModel'
 import { revalidatePath } from 'next/cache'
 
-export async function createTweetInDB(userId: string, tweetText: string) {
+export async function createTweetInDB(
+  userId: string,
+  tweetText: string,
+  path: string
+) {
   try {
     await connectToDB()
-
     const newlyCreatedTweet = await Tweet.create({
       User: userId,
       tweetText: tweetText,
     })
     console.log(newlyCreatedTweet)
+    revalidatePath(path)
   } catch (error: any) {
     throw new Error('Unable to create tweet', error.message)
   }
@@ -21,7 +25,8 @@ export async function createTweetInDB(userId: string, tweetText: string) {
 export async function createImageTweetInDB(
   userId: string,
   tweetImageUrl: string,
-  caption: string
+  caption: string,
+  path: string
 ) {
   try {
     await connectToDB()
@@ -30,6 +35,7 @@ export async function createImageTweetInDB(
       tweetImage: tweetImageUrl,
       tweetImageCaption: caption,
     })
+    revalidatePath(path)
   } catch (error: any) {
     throw new Error('Unable to create image tweet', error.message)
   }
@@ -57,27 +63,30 @@ export async function fetchAllTweets() {
 
 export async function likeTweet(
   tweetId: string,
-  action: 'inc' | 'dec',
+  likerId: string,
   path: string
 ) {
   try {
     await connectToDB()
-    const targetTweet = await Tweet.findById(tweetId)
-
-    if (action === 'inc') {
-      const updatedlikes = targetTweet.likes + 1
+    const alreadyLiked = await Tweet.find({ _id: tweetId, likes: likerId })
+    if (alreadyLiked.length === 0) {
+      console.log('Not liked, liking')
       await Tweet.findByIdAndUpdate(tweetId, {
-        likes: updatedlikes,
+        $push: {
+          likes: likerId,
+        },
       })
     } else {
-      if (targetTweet.likes > 0) {
-        const updatedlikes = targetTweet.likes - 1
-        await Tweet.findByIdAndUpdate(tweetId, {
-          likes: updatedlikes,
-        })
-      }
+      console.log('Already liked, removing like')
+      await Tweet.findByIdAndUpdate(tweetId, {
+        $pull: {
+          likes: likerId,
+        },
+      })
     }
+    const likesNumber = await Tweet.findById(tweetId)
     revalidatePath(path)
+    return likesNumber.likes.length
   } catch (error: any) {
     throw new Error('Unable to like tweet', error.message)
   }
