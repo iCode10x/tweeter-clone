@@ -11,6 +11,7 @@ import { toast } from 'react-hot-toast'
 import { editUsernameInDB } from '@/lib/actions/UserActions'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import Spinner from './Spinner'
 import Image from 'next/image'
 const ProfileSettingsButton = ({
   userId,
@@ -20,6 +21,7 @@ const ProfileSettingsButton = ({
   username: string
 }) => {
   const pathname = usePathname()
+  const [loading, setloading] = useState(false)
   const [openEditProfile, setOpenEditProfile] = useState(false)
   const [editUsername, setEditUsername] = useState(username)
   async function handleEdit() {
@@ -27,7 +29,9 @@ const ProfileSettingsButton = ({
       toast.error('Username field is empty!')
       return
     }
+    setloading(true)
     await editUsernameInDB(userId, editUsername, pathname)
+    setloading(false)
     setOpenEditProfile(false)
     toast.success('Username updated successfully!')
   }
@@ -95,12 +99,18 @@ const ProfileSettingsButton = ({
                 type="text"
                 className="w-full outline-none border border-[#787878] dark:bg-[#060606] p-3 rounded-[8px] bg-[#F6F6F6] font-SamsungSharpSans"
               />
-              <button
-                onClick={handleEdit}
-                className="bg-black text-white font-SamsungSharpSansBold rounded-[12px] py-2 px-6 text-[16px] mt-2 dark:bg-white dark:text-black mx-auto"
-              >
-                Update
-              </button>
+              {loading ? (
+                <div className="mx-auto">
+                  <Spinner width="30" height="30" color="black" />
+                </div>
+              ) : (
+                <button
+                  onClick={handleEdit}
+                  className="bg-black text-white font-SamsungSharpSansBold rounded-[12px] py-2 px-6 text-[16px] mt-2 dark:bg-white dark:text-black mx-auto"
+                >
+                  Update
+                </button>
+              )}
             </div>
           </div>
         </div>

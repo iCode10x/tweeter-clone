@@ -10,7 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import Spinner from './Spinner'
 
 interface Props {
   tweetId: string
@@ -33,18 +34,21 @@ const TweetOptions = ({
   const [editCaption, setEditCaption] = useState<string | undefined>(
     imageTweetCaption
   )
+  const [loading, setloading] = useState(false)
   const [openEditPopup, setOpenEditPopup] = useState(false)
 
   async function handleDelete() {
-    setOpenDeletePopup(false)
-
+    setloading(true)
     await deleteTweet(tweetId, pathname)
+    setloading(false)
+    setOpenDeletePopup(false)
     toast.error('Tweet deleted!')
   }
   async function handleEdit() {
-    setOpenEditPopup(false)
-
+    setloading(false)
     await editTweet(tweetId, editText, editCaption, pathname)
+    setloading(true)
+    setOpenEditPopup(false)
     toast.success('Tweet updated!')
   }
   return (
@@ -103,20 +107,24 @@ const TweetOptions = ({
             <p className="font-SamsungSharpSansBold text-[19px] sm:text-[22px] w-[248px] text-center dark:text-white">
               Do you want to delete this tweet?
             </p>
-            <div className="flex gap-6">
-              <button
-                className="text-[16px] font-SamsungSharpSansBold py-2 px-6 bg-[#CACACA]/20 rounded-[6px]"
-                onClick={() => setOpenDeletePopup(false)}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDelete}
-                className="text-[16px] font-SamsungSharpSansBold py-2 px-6 bg-black text-white rounded-[6px] dark:bg-white dark:text-black"
-              >
-                Delete
-              </button>
-            </div>
+            {loading ? (
+              <Spinner width="30" height="30" color="black" />
+            ) : (
+              <div className="flex gap-6">
+                <button
+                  className="text-[16px] font-SamsungSharpSansBold py-2 px-6 bg-[#CACACA]/20 rounded-[6px]"
+                  onClick={() => setOpenDeletePopup(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="text-[16px] font-SamsungSharpSansBold py-2 px-6 bg-black text-white rounded-[6px] dark:bg-white dark:text-black"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -151,12 +159,16 @@ const TweetOptions = ({
                     : setEditCaption(e.target.value)
                 }}
               />
-              <button
-                onClick={handleEdit}
-                className="bg-black text-white font-SamsungSharpSansBold rounded-[12px] py-2 px-6 text-[16px] mt-2 dark:bg-white dark:text-black"
-              >
-                Update
-              </button>
+              {loading ? (
+                <Spinner width="30" height="30" color="black" />
+              ) : (
+                <button
+                  onClick={handleEdit}
+                  className="bg-black text-white font-SamsungSharpSansBold rounded-[12px] py-2 px-6 text-[16px] mt-2 dark:bg-white dark:text-black"
+                >
+                  Update
+                </button>
+              )}
             </div>
           </div>
         </div>

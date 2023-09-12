@@ -5,6 +5,7 @@ import { addComment } from '@/lib/actions/TweetActions'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { usePathname } from 'next/navigation'
 import { toast } from 'react-hot-toast'
+import Spinner from './Spinner'
 
 interface SingleCommentProps {
   name: string
@@ -53,6 +54,7 @@ const Comments = ({
   tweetId,
   setOpenComments,
 }: Props) => {
+  const [loading, setLoading] = useState(false)
   const pathname = usePathname()
   const [comment, setcomment] = useState('')
   async function handleAddComment() {
@@ -60,8 +62,10 @@ const Comments = ({
       toast.error('Comment field is empty!')
       return
     }
+    setLoading(true)
     await addComment(tweetId, comment, LoggedInUserDatabaseId, pathname)
     setcomment('')
+    setLoading(false)
   }
   return (
     <div
@@ -101,18 +105,22 @@ const Comments = ({
           placeholder="Type your comment here..."
           className="sm:w-[290px] w-full rounded-[11px] dark:bg-[#242424] bg-[#CACACA] p-4 outline-none font-PoppinsLight"
         />
-        <button
-          onClick={handleAddComment}
-          className="p-5 bg-black dark:bg-white rounded-[11px]"
-        >
-          <Image
-            src="/send.png"
-            alt="send"
-            width={24}
-            height={24}
-            className="dark:invert"
-          />
-        </button>
+        {loading ? (
+          <Spinner width="24" height="24" color="black" />
+        ) : (
+          <button
+            onClick={handleAddComment}
+            className="p-5 bg-black dark:bg-white rounded-[11px]"
+          >
+            <Image
+              src="/send.png"
+              alt="send"
+              width={24}
+              height={24}
+              className="dark:invert"
+            />
+          </button>
+        )}
       </div>
     </div>
   )

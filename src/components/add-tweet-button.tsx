@@ -7,10 +7,12 @@ import { isBase64Image } from '@/lib/utils'
 import { toast } from 'react-hot-toast'
 import { createImageTweetInDB } from '@/lib/actions/TweetActions'
 import { usePathname } from 'next/navigation'
+import Spinner from './Spinner'
 
 const AddTweetButton = ({ userId }: { userId: string }) => {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [files, setFiles] = useState<File[]>([])
   const [openPopover1, setopenPopover1] = useState(false)
   const [openPopover2, setopenPopover2] = useState(false)
@@ -23,8 +25,10 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
       toast.error('Input field empty!')
       return
     }
+    setLoading(true)
     await createTweetInDB(userId, tweetText, pathname)
     toast.success('Tweet added!')
+    setLoading(false)
     setTweetText('')
     setopenPopover1(false)
   }
@@ -38,6 +42,7 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
         return
       }
     }
+    setLoading(true)
     let uploadedImageUrl = ''
     const blob = imageUrl
     const hasImageChanged = isBase64Image(blob || '')
@@ -47,11 +52,12 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
         uploadedImageUrl = imgRes[0].url
       }
     }
+
+    await createImageTweetInDB(userId, uploadedImageUrl, caption, pathname)
+    setLoading(false)
     setImageUrl(undefined)
     setCaption('')
     setopenPopover2(false)
-
-    await createImageTweetInDB(userId, uploadedImageUrl, caption, pathname)
     toast.success('Tweet added!')
   }
   function handleImage(e: ChangeEvent<HTMLInputElement>) {
@@ -89,12 +95,18 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
               className="font-SamsungSharpSans p-3 dark:bg-[#060606] rounded-[10px] w-[290px] sm:w-[393px] my-3 h-[110px] sm:h-[160px] outline-none border-[#CACACA] dark:border-[#242424] border"
             />
             <div className="flex">
-              <button
-                onClick={addTextTweet}
-                className=" rounded-[9px] font-SamsungSharpSansBold mx-auto bg-black text-white py-2 px-12 dark:bg-white dark:text-black"
-              >
-                Post
-              </button>
+              {loading ? (
+                <div className="mx-auto">
+                  <Spinner width="30" height="30" color="black" />
+                </div>
+              ) : (
+                <button
+                  onClick={addTextTweet}
+                  className=" rounded-[9px] font-SamsungSharpSansBold mx-auto bg-black text-white py-2 px-12 dark:bg-white dark:text-black"
+                >
+                  Post
+                </button>
+              )}
             </div>
             <Image
               onClick={() => setopenPopover1(false)}
@@ -134,7 +146,7 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
                     alt="image"
                     width={150}
                     height={150}
-                    className=" my-5 "
+                    className="my-5"
                   />
                   <div className="absolute top-8 right-4 w-[20px] h-[20px] rounded-full bg-white flex justify-center items-center">
                     <Image
@@ -180,13 +192,20 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
               type="text"
               className="w-full font-SamsungSharpSans dark:bg-[#060606] outline-none border border-[#CACACA] rounded-[10px] mt-3 mb-5 p-2"
             />
+
             <div className="flex">
-              <button
-                onClick={addImageTweet}
-                className=" rounded-[9px] font-SamsungSharpSansBold mx-auto bg-black text-white py-2 px-12 dark:bg-white dark:text-black"
-              >
-                Post
-              </button>
+              {loading ? (
+                <div className="mx-auto">
+                  <Spinner width="30" height="30" color="black" />
+                </div>
+              ) : (
+                <button
+                  onClick={addImageTweet}
+                  className=" rounded-[9px] font-SamsungSharpSansBold mx-auto bg-black text-white py-2 px-12 dark:bg-white dark:text-black"
+                >
+                  Post
+                </button>
+              )}
             </div>
             <Image
               onClick={() => setopenPopover2(false)}

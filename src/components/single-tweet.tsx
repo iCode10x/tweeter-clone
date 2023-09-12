@@ -24,6 +24,7 @@ const SingleTweet = ({
   const [openComments, setOpenComments] = useState(false)
   const [imageOpen, setImageOpen] = useState(false)
   const [liked, setLiked] = useState<boolean>()
+
   async function handleLike() {
     await likeTweet(_id, LoggedInUserDatabaseId, pathname)
   }
