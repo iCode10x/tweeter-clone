@@ -146,3 +146,23 @@ export async function editTweet(
     throw new Error('Unable to edit tweet', error.message)
   }
 }
+
+export async function fetchUserTweets(userId: string) {
+  try {
+    await connectToDB()
+    const tweets = await Tweet.find({ User: userId })
+      .populate({
+        path: 'User',
+        model: User,
+        select: 'name profileImage clerkId',
+      })
+      .populate({
+        path: 'tweetComments.commentator',
+        model: User,
+        select: 'name profileImage',
+      })
+    return tweets
+  } catch (error: any) {
+    throw new Error('Unable to fetch tweets', error.message)
+  }
+}

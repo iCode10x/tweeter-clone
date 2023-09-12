@@ -9,7 +9,6 @@ import Comments from './comments'
 const SingleTweet = ({
   tweetText,
   userClerkId,
-  userId,
   userName,
   userProfileImage,
   _id,
@@ -26,10 +25,10 @@ const SingleTweet = ({
   const [imageOpen, setImageOpen] = useState(false)
   const [liked, setLiked] = useState<boolean>()
   async function handleLike() {
-    await likeTweet(_id, userId, pathname)
+    await likeTweet(_id, LoggedInUserDatabaseId, pathname)
   }
   useEffect(() => {
-    const userLiked = likes.find((item) => item === userId)
+    const userLiked = likes.find((item) => item === LoggedInUserDatabaseId)
     if (userLiked) setLiked(true)
     else setLiked(false)
   }, [likes])
@@ -51,7 +50,6 @@ const SingleTweet = ({
           {tweetImage && (
             <div className="mt-2">
               <p className="font-PoppinsMedium ">{tweetImageCaption}</p>
-
               <Image
                 onClick={() => setImageOpen(true)}
                 src={tweetImage}
@@ -131,7 +129,10 @@ const SingleTweet = ({
         </div>
       )}
       {openComments && (
-        <div className="fixed dark:bg-white/10 bg-black/30 backdrop-blur-md h-screen w-screen z-20 top-0 left-0 flex justify-center items-center">
+        <div
+          onClick={() => setOpenComments(false)}
+          className="fixed dark:bg-white/10 bg-black/30 backdrop-blur-md h-screen w-screen z-20 top-0 left-0 flex justify-center items-center"
+        >
           <Comments
             tweetComments={commentsData}
             LoggedInUserDatabaseId={LoggedInUserDatabaseId}
@@ -144,9 +145,3 @@ const SingleTweet = ({
   )
 }
 export default SingleTweet
-
-// const SingleTweet = ({ likes, _id , LoggedInUserClerkId,}: DatabaseResponceTweet) => {
-//   console.log(_id, likes)
-//   return <div>SingleTweet</div>
-// }
-// export default SingleTweet

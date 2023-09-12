@@ -5,12 +5,15 @@ import AddTweetButton from '@/components/add-tweet-button'
 import Image from 'next/image'
 import ProfilePageHomeLink from '@/components/profile-page-home-link'
 import { fetchUserData } from '@/lib/actions/UserActions'
-import { DatabaseResponceUser } from '@/Types'
+import { DatabaseResponceTweets, DatabaseResponceUser } from '@/Types'
 import ProfileSettingsButton from '@/components/profile-settings-button'
+import SingleTweet from '@/components/single-tweet'
+import { fetchUserTweets } from '@/lib/actions/TweetActions'
 
 const Profile = async ({ params: { id } }: { params: { id: string } }) => {
   const UserData: DatabaseResponceUser = await fetchUserData(id)
-
+  // @ts-ignore
+  const UserTweets: DatabaseResponceTweets[] = await fetchUserTweets(id)
   return (
     <div className="flex relative">
       {/* left section */}
@@ -28,7 +31,7 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
       </div>
       <div className="w-[295px] hidden sm:flex"></div>
       {/* middle scroll section */}
-      <div className="bg-[#F6F6F6] dark:bg-[#060606] w-screen sm:w-[60vw] h-[200vh]">
+      <div className="bg-[#F6F6F6] dark:bg-[#060606] w-screen sm:w-[60vw]">
         <div className="sm:p-3 p-5  border border-[#CACACA] dark:border-[#242424] flex items-center justify-between sm:justify-center">
           <ProfileDropDown imgUrl={UserData.profileImage} />
 
@@ -61,8 +64,29 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
               My Posts
             </p>
             <div className="absolute right-5 top-5">
-              <ProfileSettingsButton />
+              <ProfileSettingsButton
+                userId={UserData._id}
+                username={UserData.name}
+              />
             </div>
+          </div>
+          <div>
+            {UserTweets.map((tweet) => (
+              <SingleTweet
+                LoggedInUserClerkId={UserData.clerkId}
+                LoggedInUserDatabaseId={id}
+                key={tweet._id}
+                tweetText={tweet.tweetText}
+                userClerkId={tweet.User.clerkId}
+                userName={UserData.name}
+                userProfileImage={UserData.profileImage}
+                tweetImage={tweet.tweetImage}
+                tweetImageCaption={tweet.tweetImageCaption}
+                tweetComments={JSON.stringify(tweet.tweetComments.reverse())}
+                _id={tweet._id}
+                likes={tweet.likes}
+              />
+            ))}
           </div>
         </div>
       </div>

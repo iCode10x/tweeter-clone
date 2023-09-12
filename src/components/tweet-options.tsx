@@ -6,7 +6,7 @@ import { deleteTweet, editTweet } from '@/lib/actions/TweetActions'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
+  DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
@@ -29,78 +29,68 @@ const TweetOptions = ({
   textTweet,
 }: Props) => {
   const [openDeletePopup, setOpenDeletePopup] = useState(false)
-  const [showTweetOptions, setShowTweetOptions] = useState(true)
   const [editText, setEditText] = useState<string | undefined>(textTweet)
   const [editCaption, setEditCaption] = useState<string | undefined>(
     imageTweetCaption
   )
   const [openEditPopup, setOpenEditPopup] = useState(false)
-  useEffect(() => {
-    if (openDeletePopup) setShowTweetOptions(false)
-    if (openEditPopup) setShowTweetOptions(false)
-  }, [openDeletePopup, openEditPopup])
+
   async function handleDelete() {
     setOpenDeletePopup(false)
-    setShowTweetOptions(true)
+
     await deleteTweet(tweetId, pathname)
     toast.error('Tweet deleted!')
   }
   async function handleEdit() {
     setOpenEditPopup(false)
-    setShowTweetOptions(true)
+
     await editTweet(tweetId, editText, editCaption, pathname)
     toast.success('Tweet updated!')
   }
   return (
     <div>
-      {showTweetOptions && (
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Image src="/more.png" alt="options" width={20} height={20} />
-          </DropdownMenuTrigger>
-          <div>
-            {tweetUserClerkID === LoggedInUserClerkId ? (
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Image src="/more.png" alt="options" width={20} height={20} />
+        </DropdownMenuTrigger>
+        <div>
+          {tweetUserClerkID === LoggedInUserClerkId ? (
+            <div>
               <div>
-                <div>
-                  <DropdownMenuContent className="rounded-[10px] relative  dark:bg-black dark:border-[#242424] mr-6">
-                    <DropdownMenuLabel>
-                      <p
-                        onClick={() => setOpenEditPopup(true)}
-                        className="text-[16px] font-PoppinsLight p-1 cursor-pointer"
-                      >
-                        Edit Tweet
-                      </p>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuLabel>
-                      <p
-                        className="text-[16px] font-PoppinsLight p-1 cursor-pointer"
-                        onClick={() => setOpenDeletePopup(true)}
-                      >
-                        Delete
-                      </p>
-                    </DropdownMenuLabel>
-                  </DropdownMenuContent>
-                </div>
+                <DropdownMenuContent className="rounded-[10px] relative  dark:bg-black dark:border-[#242424] mr-6">
+                  <DropdownMenuItem>
+                    <p
+                      onClick={() => setOpenEditPopup(true)}
+                      className="text-[16px] font-PoppinsLight p-1 cursor-pointer"
+                    >
+                      Edit Tweet
+                    </p>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <p
+                      className="text-[16px] font-PoppinsLight p-1 cursor-pointer"
+                      onClick={() => setOpenDeletePopup(true)}
+                    >
+                      Delete
+                    </p>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
               </div>
-            ) : (
-              <DropdownMenuContent className="rounded-[10px] relative  dark:bg-black dark:border-[#242424] mr-6">
-                <DropdownMenuLabel>
-                  <p className="text-[16px] font-PoppinsLight p-1">
-                    Copy Tweet
-                  </p>
-                </DropdownMenuLabel>
-              </DropdownMenuContent>
-            )}
-          </div>
-        </DropdownMenu>
-      )}
+            </div>
+          ) : (
+            <DropdownMenuContent className="rounded-[10px] relative  dark:bg-black dark:border-[#242424] mr-6">
+              <DropdownMenuItem>
+                <p className="text-[16px] font-PoppinsLight p-1">Copy Tweet</p>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          )}
+        </div>
+      </DropdownMenu>
+
       {openDeletePopup && (
         <div
-          onClick={() => {
-            setOpenDeletePopup(false)
-            setShowTweetOptions(true)
-          }}
+          onClick={() => setOpenDeletePopup(false)}
           className="fixed dark:bg-white/10 bg-black/30 backdrop-blur-md h-screen w-screen z-20 top-0 left-0 flex justify-center items-center"
         >
           <div
@@ -116,10 +106,7 @@ const TweetOptions = ({
             <div className="flex gap-6">
               <button
                 className="text-[16px] font-SamsungSharpSansBold py-2 px-6 bg-[#CACACA]/20 rounded-[6px]"
-                onClick={() => {
-                  setOpenDeletePopup(false)
-                  setShowTweetOptions(true)
-                }}
+                onClick={() => setOpenDeletePopup(false)}
               >
                 Cancel
               </button>
@@ -135,10 +122,7 @@ const TweetOptions = ({
       )}
       {openEditPopup && (
         <div
-          onClick={() => {
-            setOpenEditPopup(false)
-            setShowTweetOptions(true)
-          }}
+          onClick={() => setOpenEditPopup(false)}
           className="fixed dark:bg-white/10 bg-black/30 backdrop-blur-md h-screen w-screen z-20 top-0 left-0 flex justify-center items-center"
         >
           <div
@@ -146,10 +130,7 @@ const TweetOptions = ({
             className="sm:w-[420px] dark:bg-[#060606] bg-[#F6F6F6] flex flex-col items-center rounded-[20px] relative"
           >
             <Image
-              onClick={() => {
-                setOpenEditPopup(false)
-                setShowTweetOptions(true)
-              }}
+              onClick={() => setOpenEditPopup(false)}
               src="/close.png"
               alt="close"
               width={14}

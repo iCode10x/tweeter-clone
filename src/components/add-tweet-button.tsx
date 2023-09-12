@@ -72,8 +72,14 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
     <div>
       {/* text tweet popover */}
       {openPopover1 && (
-        <div className="fixed backdrop-blur-sm flex justify-center items-center left-0 top-0 h-screen w-screen dark:bg-white/10 bg-black/20 ">
-          <div className="bg-white dark:bg-[#060606]  p-6 rounded-[25px] relative">
+        <div
+          onClick={() => setopenPopover1(false)}
+          className="fixed backdrop-blur-sm flex justify-center items-center left-0 top-0 h-screen w-screen dark:bg-white/10 bg-black/20 "
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white dark:bg-[#060606]  p-6 rounded-[25px] relative"
+          >
             <p className="font-SamsungSharpSansBold text-xl dark:text-white">
               Whats on your mind?
             </p>
@@ -103,8 +109,14 @@ const AddTweetButton = ({ userId }: { userId: string }) => {
       )}
       {/* Image upload popover */}
       {openPopover2 && (
-        <div className="fixed backdrop-blur-sm flex justify-center items-center left-0 top-0 h-screen w-screen dark:bg-white/10 bg-black/20 ">
-          <div className="bg-white dark:bg-[#060606] w-[320px] sm:w-[393px] p-6 rounded-[25px] relative">
+        <div
+          onClick={() => setopenPopover2(false)}
+          className="fixed backdrop-blur-sm flex justify-center items-center left-0 top-0 h-screen w-screen dark:bg-white/10 bg-black/20 "
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white dark:bg-[#060606] w-[320px] sm:w-[393px] p-6 rounded-[25px] relative"
+          >
             <p className="font-SamsungSharpSansBold  dark:text-white">
               Upload Image
             </p>

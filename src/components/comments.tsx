@@ -30,7 +30,6 @@ interface Props {
 const SingleComment = ({ name, image, commentText }: SingleCommentProps) => {
   return (
     <div>
-      {/* <div className="border border-[#CACACA] w-full" /> */}
       <div className="flex items-start gap-3 p-3 border border-[#CACACA] dark:border-[#242424]">
         <Image
           src={image}
@@ -54,7 +53,6 @@ const Comments = ({
   tweetId,
   setOpenComments,
 }: Props) => {
-  // console.log('final comments:', tweetComments[0].commentator.name)
   const pathname = usePathname()
   const [comment, setcomment] = useState('')
   async function handleAddComment() {
@@ -66,7 +64,10 @@ const Comments = ({
     setcomment('')
   }
   return (
-    <div className="bg-white dark:bg-[#060606] w-[320px] sm:w-[413px] rounded-[25px] flex flex-col items-center relative">
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="bg-white dark:bg-[#060606] w-[320px] sm:w-[413px] rounded-[25px] flex flex-col items-center relative"
+    >
       <Image
         onClick={() => setOpenComments(false)}
         src="/close.png"
@@ -78,7 +79,6 @@ const Comments = ({
       <p className="text-[18px] font-SamsungSharpSansBold text-center p-5">
         Comments
       </p>
-      {/* <div className="border border-[#CACACA] w-full" /> */}
       <div className="w-full">
         <ScrollArea className="h-[280px]">
           {/* <SingleComment /> */}
@@ -92,7 +92,6 @@ const Comments = ({
           ))}
         </ScrollArea>
       </div>
-      {/* <div className="border border-[#CACACA] w-full" /> */}
       {/* Enter comments */}
       <div className="flex gap-4 p-3">
         <input

@@ -53,7 +53,6 @@ export type DatabaseResponceTweets = {
 
 export type singleTweetType = {
   _id: string
-  userId: string
   userName: string
   userProfileImage: string
   userClerkId: string

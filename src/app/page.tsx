@@ -2,18 +2,21 @@ import ThemeSwitcher from '@/components/theme-switcher'
 import Image from 'next/image'
 import { SignOutButton } from '@clerk/nextjs'
 import Link from 'next/link'
-import { createUserInDB } from '@/lib/actions/UserActions'
+import { createUserInDB, fetchUserData } from '@/lib/actions/UserActions'
 import Profile from '@/components/profile'
 import ProfileDropDown from '@/components/profile-dropDown'
 import { currentUser, SignedIn } from '@clerk/nextjs'
-import { ClerkUserTypes, DatabaseResponceTweets } from '@/Types'
+import {
+  ClerkUserTypes,
+  DatabaseResponceTweets,
+  DatabaseResponceUser,
+} from '@/Types'
 import AddTweetButton from '@/components/add-tweet-button'
 import { fetchAllTweets } from '@/lib/actions/TweetActions'
 import SingleTweet from '@/components/single-tweet'
 const Home = async () => {
   // @ts-ignore
   const User: ClerkUserTypes = await currentUser()
-
   let databaseResponceId: string = ''
   if (User) {
     const res: string = await createUserInDB(
@@ -26,18 +29,17 @@ const Home = async () => {
   }
   // @ts-ignore
   const allTweets: DatabaseResponceTweets[] = await fetchAllTweets()
-
-  // console.log(allTweets[0].tweetComments[0].commentator.profileImage)
+  const UserData: DatabaseResponceUser = await fetchUserData(databaseResponceId)
   return (
     <div className="flex relative">
       {/* left section */}
       <div className="hidden sm:flex fixed h-screen  flex-col justify-between  px-3 pr-8">
         {User ? (
           <Profile
-            name={User.firstName}
-            imgUrl={User.imageUrl}
-            email={User.emailAddresses[0].emailAddress}
-            profileLink={databaseResponceId}
+            name={UserData.name}
+            imgUrl={UserData.profileImage}
+            email={UserData.email}
+            profileLink={UserData._id}
           />
         ) : (
           <Link
@@ -64,7 +66,7 @@ const Home = async () => {
       <div className="bg-[#F6F6F6] dark:bg-[#060606] w-screen sm:w-[60vw]">
         <div className="sm:p-3 p-5  border border-[#CACACA] dark:border-[#242424] flex items-center justify-between sm:justify-center">
           {User ? (
-            <ProfileDropDown imgUrl={User.imageUrl} />
+            <ProfileDropDown imgUrl={UserData.profileImage} />
           ) : (
             <Link
               href="/login"
@@ -85,18 +87,16 @@ const Home = async () => {
         <div>
           {allTweets.map((tweet) => (
             <SingleTweet
-              LoggedInUserClerkId={User.id}
-              LoggedInUserDatabaseId={databaseResponceId}
+              LoggedInUserClerkId={UserData.clerkId}
+              LoggedInUserDatabaseId={UserData._id}
               key={tweet._id}
               tweetText={tweet.tweetText}
               userClerkId={tweet.User.clerkId}
-              userId={databaseResponceId}
-              userName={User.firstName}
-              userProfileImage={User.imageUrl}
+              userName={tweet.User.name}
+              userProfileImage={tweet.User.profileImage}
               tweetImage={tweet.tweetImage}
               tweetImageCaption={tweet.tweetImageCaption}
               tweetComments={JSON.stringify(tweet.tweetComments.reverse())}
-              // testArray={testArray}
               _id={tweet._id}
               likes={tweet.likes}
             />
@@ -112,10 +112,6 @@ const Home = async () => {
       <div className="fixed bottom-[50px] right-6">
         <AddTweetButton userId={databaseResponceId} />
       </div>
-
-      {/* Popover section */}
-
-      {/* <div className="fixed   h-screen w-screen dark:bg-black/40 bg-white/70 "></div> */}
     </div>
   )
 }
