@@ -33,7 +33,10 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
       {/* middle scroll section */}
       <div className="bg-[#F6F6F6] dark:bg-[#060606] w-screen sm:w-[60vw]">
         <div className="sm:p-3 p-5  border border-[#CACACA] dark:border-[#242424] flex items-center justify-between sm:justify-center">
-          <ProfileDropDown imgUrl={UserData.profileImage} />
+          <ProfileDropDown
+            imgUrl={UserData.profileImage}
+            linkId={UserData._id}
+          />
 
           <Image src="/X.png" alt="X" width={50} height={50} className="" />
           <div className="sm:hidden">
