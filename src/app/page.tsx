@@ -66,7 +66,10 @@ const Home = async () => {
       <div className="bg-[#F6F6F6] dark:bg-[#060606] w-screen sm:w-[60vw]">
         <div className="sm:p-3 p-5  border border-[#CACACA] dark:border-[#242424] flex items-center justify-between sm:justify-center">
           {User ? (
-            <ProfileDropDown imgUrl={UserData.profileImage} />
+            <ProfileDropDown
+              imgUrl={UserData.profileImage}
+              linkId={UserData._id}
+            />
           ) : (
             <Link
               href="/login"

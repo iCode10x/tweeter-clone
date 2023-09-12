@@ -11,8 +11,9 @@ import Link from 'next/link'
 import { SignOutButton } from '@clerk/nextjs'
 interface Props {
   imgUrl: string
+  linkId: string
 }
-const ProfileDropDown = ({ imgUrl }: Props) => {
+const ProfileDropDown = ({ imgUrl, linkId }: Props) => {
   return (
     <div className="font-PoppinsMedium">
       <DropdownMenu>
@@ -31,7 +32,7 @@ const ProfileDropDown = ({ imgUrl }: Props) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="border-[#CACACA] dark:border-[#242424] " />
           <DropdownMenuItem>
-            <Link href="/profile">My Profile</Link>
+            <Link href={`/profile/${linkId}`}>My Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator className="dark:border-[#242424]" />
           <DropdownMenuItem>
