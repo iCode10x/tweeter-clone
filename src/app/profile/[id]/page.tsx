@@ -74,7 +74,7 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
             </div>
           </div>
           <div>
-            {UserTweets.map((tweet) => (
+            {UserTweets.reverse().map((tweet) => (
               <SingleTweet
                 LoggedInUserClerkId={UserData.clerkId}
                 LoggedInUserDatabaseId={id}

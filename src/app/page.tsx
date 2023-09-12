@@ -88,7 +88,7 @@ const Home = async () => {
         {/* Tweets */}
         {/* ///////////// */}
         <div>
-          {allTweets.map((tweet) => (
+          {allTweets.reverse().map((tweet) => (
             <SingleTweet
               LoggedInUserClerkId={UserData.clerkId}
               LoggedInUserDatabaseId={UserData._id}
