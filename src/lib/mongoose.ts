@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 export async function connectToDB() {
   try {
     const connectionString = process.env.MONGODB_CONNECTION_STRING
+    console.log(connectionString)
     if (connectionString) await mongoose.connect(connectionString)
     else
       throw new Error(

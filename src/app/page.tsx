@@ -6,7 +6,6 @@ import { createUserInDB, fetchUserData } from '@/lib/actions/UserActions'
 import Profile from '@/components/profile'
 import ProfileDropDown from '@/components/profile-dropDown'
 import { currentUser, SignedIn } from '@clerk/nextjs'
-import Spinner from '@/components/Spinner'
 import {
   ClerkUserTypes,
   DatabaseResponceTweets,

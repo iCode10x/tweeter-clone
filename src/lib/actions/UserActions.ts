@@ -12,6 +12,7 @@ export async function createUserInDB(
 ) {
   try {
     await connectToDB()
+    console.log('connection hogya he')
     const foundUser: DatabaseResponceUser | null = await User.findOne({
       clerkId: clerkId,
     })
@@ -27,6 +28,7 @@ export async function createUserInDB(
       return foundUser._id
     }
   } catch (error: any) {
+    console.log('ERROR AYA HE:', error)
     throw new Error('Could not create User', error.message)
   }
 }

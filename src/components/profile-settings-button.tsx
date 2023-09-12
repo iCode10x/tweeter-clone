@@ -75,7 +75,7 @@ const ProfileSettingsButton = ({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="sm:w-[420px] dark:bg-[#060606] bg-[#F6F6F6] flex flex-col items-center rounded-[20px] relative"
+            className="sm:w-[420px] w-[320px] dark:bg-[#060606] bg-[#F6F6F6] flex flex-col items-center rounded-[20px] relative"
           >
             <Image
               onClick={() => setOpenEditProfile(false)}
