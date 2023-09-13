@@ -55,7 +55,13 @@ const TweetOptions = ({
     <div>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <Image src="/more.png" alt="options" width={20} height={20} />
+          <Image
+            src="/more.png"
+            alt="options"
+            width={20}
+            height={20}
+            className="min-w-[20px] min-h-[20px] object-cover"
+          />
         </DropdownMenuTrigger>
         <div>
           {tweetUserClerkID === LoggedInUserClerkId ? (
