@@ -73,9 +73,6 @@ const TweetOptions = ({
               <div>
                 <DropdownMenuContent className="rounded-[10px] relative  dark:bg-black dark:border-[#242424] mr-6">
                   <DropdownMenuItem>
-                    <p onClick={handleCopy}>Copy</p>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
                     <p
                       onClick={() => setOpenEditPopup(true)}
                       className="text-[16px] font-PoppinsLight p-1 cursor-pointer"
