@@ -81,7 +81,7 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
             {UserTweets.reverse().map((tweet) => (
               <SingleTweet
                 tweetCreaterID={tweet.User._id}
-                LoggedInUserClerkId={UserData.clerkId}
+                LoggedInUserClerkId={currentUser.userId || ''}
                 LoggedInUserDatabaseId={id}
                 key={tweet._id}
                 tweetText={tweet.tweetText}
