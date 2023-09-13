@@ -46,13 +46,13 @@ const Home = async () => {
                 email={UserData.email}
                 profileLink={UserData._id}
               />
-              <div>
+              {/* <div>
                 <Notifications
                   LoggedInUserId={UserData._id}
                   notifications={JSON.stringify(UserData.notifications)}
                   notificationsNumber={UserData.notificatinsNumber}
                 />
-              </div>
+              </div> */}
             </div>
           ) : (
             <Link
