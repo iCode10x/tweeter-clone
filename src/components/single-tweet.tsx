@@ -44,7 +44,7 @@ const SingleTweet = ({
               alt="profile-image"
               width={40}
               height={40}
-              className="rounded-full w-[40px] h-[40px] object-contain"
+              className="rounded-full min-w-[40px] min-h-[40px] object-cover"
             />
           </Link>
           <div>
