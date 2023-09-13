@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import clipboardCopy from 'clipboard-copy'
 import { toast } from 'react-hot-toast'
 import { deleteTweet, editTweet } from '@/lib/actions/TweetActions'
 import {
@@ -51,6 +52,9 @@ const TweetOptions = ({
     setOpenEditPopup(false)
     toast.success('Tweet updated!')
   }
+  function handleCopy() {
+    clipboardCopy(textTweet as string).then(() => console.log('copied'))
+  }
   return (
     <div>
       <DropdownMenu>
@@ -68,6 +72,9 @@ const TweetOptions = ({
             <div>
               <div>
                 <DropdownMenuContent className="rounded-[10px] relative  dark:bg-black dark:border-[#242424] mr-6">
+                  <DropdownMenuItem>
+                    <p onClick={handleCopy}>Copy</p>
+                  </DropdownMenuItem>
                   <DropdownMenuItem>
                     <p
                       onClick={() => setOpenEditPopup(true)}
@@ -91,7 +98,12 @@ const TweetOptions = ({
           ) : (
             <DropdownMenuContent className="rounded-[10px] relative  dark:bg-black dark:border-[#242424] mr-6">
               <DropdownMenuItem>
-                <p className="text-[16px] font-PoppinsLight p-1">Copy Tweet</p>
+                <p
+                  onClick={handleCopy}
+                  className="text-[16px] font-PoppinsLight p-1"
+                >
+                  Copy Tweet
+                </p>
               </DropdownMenuItem>
             </DropdownMenuContent>
           )}
