@@ -64,6 +64,7 @@ export async function fetchAllTweets() {
 export async function likeTweet(
   tweetId: string,
   likerId: string,
+  tweetCreaterId: string,
   path: string
 ) {
   try {
@@ -76,12 +77,20 @@ export async function likeTweet(
           likes: likerId,
         },
       })
+      await User.findByIdAndUpdate(tweetCreaterId, {
+        $push: { notifications: { visitorId: likerId, activity: 'like' } },
+        $inc: { notificatinsNumber: 1 },
+      })
     } else {
       console.log('Already liked, removing like')
       await Tweet.findByIdAndUpdate(tweetId, {
         $pull: {
           likes: likerId,
         },
+      })
+      await User.findByIdAndUpdate(tweetCreaterId, {
+        $pull: { notifications: { visitorId: likerId, activity: 'like' } },
+        $inc: { notificatinsNumber: -1 },
       })
     }
     const likesNumber = await Tweet.findById(tweetId)
@@ -96,6 +105,7 @@ export async function addComment(
   tweetId: string,
   commentText: string,
   LoggedInUserDatabaseId: string,
+  tweetCreaterId: string,
   path: string
 ) {
   try {
@@ -107,6 +117,15 @@ export async function addComment(
           text: commentText,
         },
       },
+    })
+    await User.findByIdAndUpdate(tweetCreaterId, {
+      $push: {
+        notifications: {
+          visitorId: LoggedInUserDatabaseId,
+          activity: 'comment',
+        },
+      },
+      $inc: { notificatinsNumber: 1 },
     })
     revalidatePath(path)
   } catch (error: any) {

@@ -25,6 +25,8 @@ export type DatabaseResponceUser = {
   clerkId: string
   tweets: any
   _id: string
+  notificatinsNumber: number
+  notifications: any
 }
 
 export type DatabaseResponceTweets = {
@@ -57,6 +59,7 @@ export type singleTweetType = {
   userProfileImage: string
   userClerkId: string
   LoggedInUserClerkId: string
+  tweetCreaterID: string
   tweetText: string
   likes: string[]
   tweetComments: any
@@ -64,10 +67,13 @@ export type singleTweetType = {
   tweetImageCaption: string
   LoggedInUserDatabaseId: string
 }
-// ;[
-//   {
-//     commentator: new ObjectId('64f8daa05ecffb111db6aa91'),
-//     text: 'Just a random comment',
-//     _id: new ObjectId('64fcb6eda825a8396847e88d'),
-//   },
-// ]
+
+export type NotificationsType = {
+  visitorId: {
+    _id: string
+    name: string
+    profileImage: string
+  }
+  activity: 'like' | 'comment'
+  _id: string
+}

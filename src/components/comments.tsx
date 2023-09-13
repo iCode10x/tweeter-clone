@@ -25,6 +25,7 @@ interface Props {
   }[]
   LoggedInUserDatabaseId: string
   tweetId: string
+  tweetCreaterID: string
   setOpenComments: Dispatch<SetStateAction<boolean>>
 }
 
@@ -53,6 +54,7 @@ const Comments = ({
   LoggedInUserDatabaseId,
   tweetId,
   setOpenComments,
+  tweetCreaterID,
 }: Props) => {
   const [loading, setLoading] = useState(false)
   const pathname = usePathname()
@@ -63,7 +65,13 @@ const Comments = ({
       return
     }
     setLoading(true)
-    await addComment(tweetId, comment, LoggedInUserDatabaseId, pathname)
+    await addComment(
+      tweetId,
+      comment,
+      LoggedInUserDatabaseId,
+      tweetCreaterID,
+      pathname
+    )
     setcomment('')
     setLoading(false)
   }

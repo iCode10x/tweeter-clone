@@ -36,7 +36,11 @@ export async function createUserInDB(
 export async function fetchUserData(id: string) {
   try {
     await connectToDB()
-    const res = await User.findById(id)
+    const res = await User.findById(id).populate({
+      path: 'notifications.visitorId',
+      model: User,
+      select: 'name profileImage',
+    })
     return res
   } catch (error: any) {
     throw new Error('Could not fetch User', error.message)
@@ -57,5 +61,21 @@ export const editUsernameInDB = async (
     revalidatePath('/')
   } catch (error: any) {
     throw new Error('Could not update Username', error.message)
+  }
+}
+
+export async function resetNotificationNumber(
+  loggedInUserID: string,
+  path: string
+) {
+  console.log('Update count')
+  try {
+    await connectToDB()
+    await User.findByIdAndUpdate(loggedInUserID, {
+      notificatinsNumber: 0,
+    })
+    revalidatePath(path)
+  } catch (error: any) {
+    throw new Error('Could not update notification number', error.message)
   }
 }

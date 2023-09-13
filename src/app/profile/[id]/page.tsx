@@ -9,11 +9,13 @@ import { DatabaseResponceTweets, DatabaseResponceUser } from '@/Types'
 import ProfileSettingsButton from '@/components/profile-settings-button'
 import SingleTweet from '@/components/single-tweet'
 import { fetchUserTweets } from '@/lib/actions/TweetActions'
+import { auth } from '@clerk/nextjs'
 
 const Profile = async ({ params: { id } }: { params: { id: string } }) => {
   const UserData: DatabaseResponceUser = await fetchUserData(id)
   // @ts-ignore
   const UserTweets: DatabaseResponceTweets[] = await fetchUserTweets(id)
+  const currentUser = auth()
   return (
     <div className="flex relative">
       {/* left section */}
@@ -66,16 +68,19 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
             <p className="text-xl mt-12 font-SamsungSharpSansBold dark:text-white">
               My Posts
             </p>
-            <div className="absolute right-5 top-5">
-              <ProfileSettingsButton
-                userId={UserData._id}
-                username={UserData.name}
-              />
-            </div>
+            {UserData.clerkId === currentUser.userId && (
+              <div className="absolute right-5 top-5">
+                <ProfileSettingsButton
+                  userId={UserData._id}
+                  username={UserData.name}
+                />
+              </div>
+            )}
           </div>
           <div>
             {UserTweets.reverse().map((tweet) => (
               <SingleTweet
+                tweetCreaterID={tweet.User._id}
                 LoggedInUserClerkId={UserData.clerkId}
                 LoggedInUserDatabaseId={id}
                 key={tweet._id}
