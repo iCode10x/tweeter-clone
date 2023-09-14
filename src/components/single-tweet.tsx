@@ -27,10 +27,13 @@ const SingleTweet = ({
   const [imageOpen, setImageOpen] = useState(false)
   const [liked, setLiked] = useState<boolean>()
   async function handleLike() {
+    console.log('1st: ', LoggedInUserDatabaseId)
     await likeTweet(_id, LoggedInUserDatabaseId, tweetCreaterID, pathname)
   }
 
   useEffect(() => {
+    console.log('Liker ids: ', likes)
+    console.log('Logged In user database id:', LoggedInUserDatabaseId)
     const userLiked = likes.find((item) => item === LoggedInUserDatabaseId)
     if (userLiked) setLiked(true)
     else setLiked(false)
