@@ -25,11 +25,14 @@ const SingleTweet = ({
   const pathname = usePathname()
   const [openComments, setOpenComments] = useState(false)
   const [imageOpen, setImageOpen] = useState(false)
-  const [liked, setLiked] = useState<boolean>(true)
+  const [liked, setLiked] = useState<boolean>()
   async function handleLike() {
     await likeTweet(_id, LoggedInUserDatabaseId, tweetCreaterID, pathname)
   }
+
   useEffect(() => {
+    console.log(likes)
+    console.log(LoggedInUserDatabaseId)
     const userLiked = likes.find((item) => item === LoggedInUserDatabaseId)
     if (userLiked) setLiked(true)
     else setLiked(false)
