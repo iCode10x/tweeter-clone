@@ -31,8 +31,6 @@ const SingleTweet = ({
   }
 
   useEffect(() => {
-    console.log(likes)
-    console.log(LoggedInUserDatabaseId)
     const userLiked = likes.find((item) => item === LoggedInUserDatabaseId)
     if (userLiked) setLiked(true)
     else setLiked(false)

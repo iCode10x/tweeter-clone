@@ -82,7 +82,7 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
               <SingleTweet
                 tweetCreaterID={tweet.User._id}
                 LoggedInUserClerkId={currentUser.userId || ''}
-                LoggedInUserDatabaseId={id}
+                LoggedInUserDatabaseId={UserData._id}
                 key={tweet._id}
                 tweetText={tweet.tweetText}
                 userClerkId={tweet.User.clerkId}
