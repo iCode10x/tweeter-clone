@@ -47,6 +47,16 @@ export async function fetchUserData(id: string) {
   }
 }
 
+export async function fetchUserDataByClerkId(id: string) {
+  try {
+    await connectToDB()
+    const res = await User.findOne({ clerkId: id })
+    return res._id
+  } catch (error: any) {
+    throw new Error('Could not fetch User', error.message)
+  }
+}
+
 export const editUsernameInDB = async (
   userId: string,
   updatedUsername: string,

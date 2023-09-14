@@ -9,6 +9,7 @@ import { DatabaseResponceTweets, DatabaseResponceUser } from '@/Types'
 import ProfileSettingsButton from '@/components/profile-settings-button'
 import SingleTweet from '@/components/single-tweet'
 import { fetchUserTweets } from '@/lib/actions/TweetActions'
+import { fetchUserDataByClerkId } from '@/lib/actions/UserActions'
 import { auth } from '@clerk/nextjs'
 
 const Profile = async ({ params: { id } }: { params: { id: string } }) => {
@@ -16,6 +17,10 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
   // @ts-ignore
   const UserTweets: DatabaseResponceTweets[] = await fetchUserTweets(id)
   const currentUser = auth()
+  const LoggedInUserDataBaseId = await fetchUserDataByClerkId(
+    currentUser.userId as string
+  )
+  console.log('ID: ', LoggedInUserDataBaseId)
   return (
     <div className="flex relative">
       {/* left section */}
@@ -82,7 +87,7 @@ const Profile = async ({ params: { id } }: { params: { id: string } }) => {
               <SingleTweet
                 tweetCreaterID={tweet.User._id}
                 LoggedInUserClerkId={currentUser.userId || ''}
-                LoggedInUserDatabaseId={UserData._id}
+                LoggedInUserDatabaseId={LoggedInUserDataBaseId}
                 key={tweet._id}
                 tweetText={tweet.tweetText}
                 userClerkId={tweet.User.clerkId}
