@@ -25,7 +25,7 @@ const SingleTweet = ({
   const pathname = usePathname()
   const [openComments, setOpenComments] = useState(false)
   const [imageOpen, setImageOpen] = useState(false)
-  const [liked, setLiked] = useState<boolean>()
+  const [liked, setLiked] = useState<boolean>(true)
   async function handleLike() {
     await likeTweet(_id, LoggedInUserDatabaseId, tweetCreaterID, pathname)
   }
@@ -33,7 +33,7 @@ const SingleTweet = ({
     const userLiked = likes.find((item) => item === LoggedInUserDatabaseId)
     if (userLiked) setLiked(true)
     else setLiked(false)
-  }, [likes, pathname])
+  }, [likes])
   return (
     <div className="border flex justify-between border-[#CACACA] dark:border-[#242424] p-7 pr-2">
       <div>
