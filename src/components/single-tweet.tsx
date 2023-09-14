@@ -33,7 +33,7 @@ const SingleTweet = ({
     const userLiked = likes.find((item) => item === LoggedInUserDatabaseId)
     if (userLiked) setLiked(true)
     else setLiked(false)
-  }, [likes])
+  }, [likes, LoggedInUserDatabaseId])
   return (
     <div className="border flex justify-between border-[#CACACA] dark:border-[#242424] p-7 pr-2">
       <div>
